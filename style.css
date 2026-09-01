@@ -1,0 +1,126 @@
+/* Grundläggande återställning så olika webbläsare beter sig lika */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f7f6f3;
+  color: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e2e0da;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.character {
+  font-size: 6rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.romaji {
+  font-size: 1.5rem;
+  color: #888;
+  min-height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.romaji.visible {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+button {
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #d4d1c8;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #f0efeb;
+}
+
+#reveal-btn {
+  margin-bottom: 1.5rem;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+#progress {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.stroke-card {
+  margin-top: 1.25rem;
+}
+
+.stroke-card h2 {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.stroke-block {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 0.5rem 0.75rem;
+}
+
+.stroke-label {
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.4rem;
+}
+
+.stroke-img {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #e2e0da;
+  border-radius: 8px;
+  background: white;
+  object-fit: contain;
+}
+
+.stroke-note {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #999;
+  max-width: 260px;
+}
