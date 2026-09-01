@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rasengan — Lär dig Hiragana</title>
+  <title>Rasengan — Lär dig japanska</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -11,46 +11,103 @@
 </head>
 <body>
 
-  <header>
-    <p class="app-name">Rasengan</p>
-    <p class="subtitle">Steg 1 · de fem första tecknen</p>
-  </header>
+  <div class="app">
 
-  <main>
-    <section class="card">
-      <p class="character" id="character">あ</p>
-
-      <p class="romaji" id="romaji">?</p>
-      <button id="reveal-btn">Visa uttal</button>
-
-      <div class="nav-buttons">
-        <button id="prev-btn" class="nav-btn" aria-label="Föregående tecken">←</button>
-        <span id="progress">1 / 5</span>
-        <button id="next-btn" class="nav-btn" aria-label="Nästa tecken">→</button>
+    <!-- ===== STARTSIDA ===== -->
+    <section id="screen-landing" class="screen active">
+      <div class="landing-content">
+        <h1 class="brand">Rasengan</h1>
+        <p class="tagline">Lär dig japanska från grunden</p>
+        <button class="hai-btn" data-target="screen-menu">
+          <span class="hai-jp">はい</span>
+          <span class="hai-romaji">Hai</span>
+        </button>
       </div>
     </section>
 
-    <section class="card stroke-card">
-      <h2>Hur man skriver det</h2>
+    <!-- ===== HUVUDMENY ===== -->
+    <section id="screen-menu" class="screen">
+      <button class="back-btn" data-target="screen-landing">← Tillbaka</button>
+      <h2 class="screen-title">Vad vill du öva på?</h2>
+      <div class="menu-grid">
+        <button class="menu-tile" data-target="screen-tecken-menu">
+          <span class="tile-label">Tecken</span>
+        </button>
+        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Läsa">
+          <span class="tile-label">Läsa</span>
+          <span class="tile-badge">Kommer snart</span>
+        </button>
+        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Prata">
+          <span class="tile-label">Prata</span>
+          <span class="tile-badge">Kommer snart</span>
+        </button>
+      </div>
+    </section>
 
-      <div class="stroke-row">
-        <div class="stroke-block">
-          <p class="stroke-label">Ordning &amp; startpunkt</p>
-          <img id="stroke-static" class="stroke-img" alt="Numrerad streckordning" />
-        </div>
+    <!-- ===== TECKEN-MENY ===== -->
+    <section id="screen-tecken-menu" class="screen">
+      <button class="back-btn" data-target="screen-menu">← Tillbaka</button>
+      <h2 class="screen-title">Välj alfabet</h2>
+      <div class="menu-grid">
+        <button class="menu-tile" data-target="screen-lesson">
+          <span class="tile-label">Hiragana</span>
+        </button>
+        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Katakana">
+          <span class="tile-label">Katakana</span>
+          <span class="tile-badge">Kommer snart</span>
+        </button>
+        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Kanji">
+          <span class="tile-label">Kanji</span>
+          <span class="tile-badge">Kommer snart</span>
+        </button>
+      </div>
+    </section>
 
-        <div class="stroke-block">
-          <p class="stroke-label">Se det skrivas</p>
-          <img id="stroke-gif" class="stroke-img" alt="Animerad streckordning" />
+    <!-- ===== LEKTION: HIRAGANA ===== -->
+    <section id="screen-lesson" class="screen">
+      <button class="back-btn" data-target="screen-tecken-menu">← Tillbaka</button>
+
+      <div class="card">
+        <p class="character" id="character">あ</p>
+        <p class="romaji" id="romaji">?</p>
+        <button id="reveal-btn">Visa uttal</button>
+
+        <div class="nav-buttons">
+          <button id="prev-btn" class="nav-btn" aria-label="Föregående tecken">←</button>
+          <span id="progress">1 / 5</span>
+          <button id="next-btn" class="nav-btn" aria-label="Nästa tecken">→</button>
         </div>
       </div>
 
-      <p class="stroke-note">
-        Källa: Wikimedia Commons (fritt licensierat). Siffrorna visar ordningen,
-        och pennan börjar där varje streck har sin siffra.
-      </p>
+      <div class="card stroke-card">
+        <h2>Hur man skriver det</h2>
+        <div class="stroke-row">
+          <div class="stroke-block">
+            <p class="stroke-label">Ordning &amp; startpunkt</p>
+            <img id="stroke-static" class="stroke-img" alt="Numrerad streckordning" />
+          </div>
+          <div class="stroke-block">
+            <p class="stroke-label">Se det skrivas</p>
+            <img id="stroke-gif" class="stroke-img" alt="Animerad streckordning" />
+          </div>
+        </div>
+        <p class="stroke-note">
+          Källa: Wikimedia Commons (fritt licensierat). Siffrorna visar ordningen,
+          och pennan börjar där varje streck har sin siffra.
+        </p>
+      </div>
     </section>
-  </main>
+
+    <!-- ===== PLACEHOLDER (återanvänds för Läsa / Prata / Katakana / Kanji) ===== -->
+    <section id="screen-placeholder" class="screen">
+      <button class="back-btn" id="placeholder-back">← Tillbaka</button>
+      <div class="placeholder-content">
+        <h2 id="placeholder-title" class="screen-title">—</h2>
+        <p class="placeholder-text">Den här delen är inte byggd än. Vi kommer hit snart!</p>
+      </div>
+    </section>
+
+  </div>
 
   <script src="data.js"></script>
   <script src="script.js"></script>
