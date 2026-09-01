@@ -3,44 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lär dig Hiragana</title>
+  <title>Rasengan — Lär dig Hiragana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header>
-    <h1>Lär dig Hiragana</h1>
-    <p class="subtitle">Steg 1: de fem första tecknen</p>
+    <p class="app-name">Rasengan</p>
+    <p class="subtitle">Steg 1 · de fem första tecknen</p>
   </header>
 
   <main>
     <section class="card">
-      <!-- Här visas själva tecknet, stort och tydligt -->
       <p class="character" id="character">あ</p>
 
-      <!-- Uttalet är dolt tills man klickar på knappen -->
       <p class="romaji" id="romaji">?</p>
       <button id="reveal-btn">Visa uttal</button>
 
       <div class="nav-buttons">
-        <button id="prev-btn">← Föregående</button>
+        <button id="prev-btn" class="nav-btn" aria-label="Föregående tecken">←</button>
         <span id="progress">1 / 5</span>
-        <button id="next-btn">Nästa →</button>
+        <button id="next-btn" class="nav-btn" aria-label="Nästa tecken">→</button>
       </div>
     </section>
 
-    <!-- Ny sektion: visar hur tecknet skrivs för hand, streck för streck -->
     <section class="card stroke-card">
       <h2>Hur man skriver det</h2>
 
-      <div class="stroke-block">
-        <p class="stroke-label">Ordning &amp; startpunkt</p>
-        <img id="stroke-static" class="stroke-img" alt="Numrerad streckordning" />
-      </div>
+      <div class="stroke-row">
+        <div class="stroke-block">
+          <p class="stroke-label">Ordning &amp; startpunkt</p>
+          <img id="stroke-static" class="stroke-img" alt="Numrerad streckordning" />
+        </div>
 
-      <div class="stroke-block">
-        <p class="stroke-label">Se det skrivas</p>
-        <img id="stroke-gif" class="stroke-img" alt="Animerad streckordning" />
+        <div class="stroke-block">
+          <p class="stroke-label">Se det skrivas</p>
+          <img id="stroke-gif" class="stroke-img" alt="Animerad streckordning" />
+        </div>
       </div>
 
       <p class="stroke-note">
@@ -50,8 +52,6 @@
     </section>
   </main>
 
-  <!-- Vi laddar in datan (data.js) innan själva logiken (script.js),
-       eftersom script.js behöver kunna använda listan HIRAGANA -->
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>

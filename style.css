@@ -1,126 +1,188 @@
-/* Grundläggande återställning så olika webbläsare beter sig lika */
+/* ===== Grundinställningar ===== */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --color-bg: #0B0B0D;
+  --color-card: #F2660D;
+  --color-card-deep: #C94E00;
+  --color-ink: #141210;
+  --color-silver: #D6D9DC;
+  --color-silver-deep: #9BA0A6;
+  --color-silver-text: #17181A;
+  --color-text-muted: #8C8C8C;
+
+  --font-display: "Noto Sans JP", system-ui, sans-serif;
+  --font-body: "Rajdhani", "Zen Kaku Gothic New", system-ui, sans-serif;
+}
+
 body {
-  font-family: system-ui, sans-serif;
-  background: #f7f6f3;
-  color: #1a1a1a;
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-silver);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 1rem;
+  padding: 3rem 1.25rem;
 }
 
+/* ===== Header ===== */
 header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-h1 {
-  font-size: 1.75rem;
+.app-name {
+  font-family: var(--font-body);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-card);
 }
 
 .subtitle {
-  color: #666;
-  margin-top: 0.25rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+  letter-spacing: 0.03em;
 }
 
+/* ===== Kort ===== */
 .card {
-  background: white;
-  border: 1px solid #e2e0da;
-  border-radius: 12px;
-  padding: 2.5rem 2rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-card-deep);
+  border-radius: 4px;
+  padding: 2.75rem 2rem;
   text-align: center;
   width: 100%;
   max-width: 320px;
+  box-shadow: 0 0 40px -8px rgba(242, 102, 13, 0.55);
 }
 
 .character {
-  font-size: 6rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 6.5rem;
   line-height: 1;
-  margin-bottom: 1rem;
+  color: var(--color-ink);
+  margin-bottom: 1.25rem;
 }
 
 .romaji {
+  font-family: var(--font-body);
   font-size: 1.5rem;
-  color: #888;
+  font-weight: 600;
+  color: rgba(20, 18, 16, 0.35);
   min-height: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .romaji.visible {
-  color: #1a1a1a;
-  font-weight: 600;
+  color: var(--color-ink);
 }
 
 button {
+  font-family: var(--font-body);
   font-size: 1rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  border: 1px solid #d4d1c8;
-  background: #fff;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 1.4rem;
+  border-radius: 3px;
+  border: 1px solid var(--color-silver-deep);
+  background: var(--color-silver);
+  color: var(--color-silver-text);
   cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
-  background: #f0efeb;
+button:hover:not(:disabled) {
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 #reveal-btn {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .nav-buttons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.nav-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 #progress {
-  color: #888;
+  color: rgba(20, 18, 16, 0.6);
   font-size: 0.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  min-width: 3rem;
 }
 
+/* ===== Streckordning ===== */
 .stroke-card {
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
+  box-shadow: none;
+  background: #151517;
+  border-color: #2A2A2D;
 }
 
 .stroke-card h2 {
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-card);
+  margin-bottom: 1.25rem;
 }
 
-.stroke-block {
-  display: inline-block;
-  vertical-align: top;
-  margin: 0 0.5rem 0.75rem;
+.stroke-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 .stroke-label {
-  font-size: 0.75rem;
-  color: #888;
-  margin-bottom: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
 }
 
 .stroke-img {
-  width: 120px;
-  height: 120px;
-  border: 1px solid #e2e0da;
-  border-radius: 8px;
-  background: white;
+  width: 110px;
+  height: 110px;
+  border: 1px solid #2A2A2D;
+  border-radius: 3px;
+  background: #FBF9F3;
   object-fit: contain;
 }
 
 .stroke-note {
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  color: #999;
-  max-width: 260px;
+  margin-top: 1.25rem;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
 }
