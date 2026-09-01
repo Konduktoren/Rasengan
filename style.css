@@ -195,6 +195,225 @@ body {
   text-transform: uppercase;
 }
 
+/* En rad = alfabet-knappen + den lilla info-knappen bredvid */
+.menu-tile-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+
+.menu-tile-row .menu-tile {
+  flex: 1;
+}
+
+.info-btn {
+  flex-shrink: 0;
+  width: 2.8rem;
+  border-radius: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.info-btn:hover {
+  border-color: var(--color-card);
+  color: var(--color-card);
+  box-shadow: 0 0 14px -6px rgba(242, 102, 13, 0.7);
+}
+
+/* ===== Info-ruta (modal) ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  z-index: 50;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  border-left: 3px solid var(--color-card);
+  border-radius: 4px;
+  padding: 2.25rem 1.75rem 1.75rem;
+  max-width: 340px;
+  width: 100%;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  width: auto;
+  padding: 0.3rem 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.modal-close:hover {
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-silver);
+}
+
+.modal-title {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-card);
+  margin-bottom: 0.9rem;
+}
+
+.modal-body {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-silver);
+}
+
+.modal-card-wide {
+  max-width: 380px;
+}
+
+.modal-body-text {
+  margin-bottom: 1rem;
+}
+
+.modal-subheading {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-silver);
+  margin: 1.5rem 0 0.6rem;
+}
+
+.modal-note {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0.75rem 0 0.25rem;
+}
+
+/* ===== Gojūon-tabell (illustration i info-rutan) ===== */
+.gojuon-table {
+  display: grid;
+  grid-template-columns: 1.1rem repeat(5, 1fr);
+  gap: 3px;
+  margin: 0.5rem 0;
+}
+
+.gojuon-cell {
+  background: var(--color-surface);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.1rem;
+  min-height: 2.6rem;
+}
+
+.gojuon-header {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-height: 1.2rem;
+}
+
+.gojuon-row-label {
+  background: transparent;
+  color: var(--color-card);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.gojuon-empty {
+  color: var(--color-surface-border);
+  font-size: 0.8rem;
+}
+
+.gojuon-char {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-card);
+  line-height: 1.1;
+}
+
+.gojuon-romaji {
+  font-size: 0.55rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ===== Exempelord (visar hur rader kombineras) ===== */
+.example-word {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.75rem;
+  flex-wrap: wrap;
+}
+
+.example-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-surface);
+  border-radius: 4px;
+  padding: 0.6rem 0.7rem;
+}
+
+.example-char {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: var(--color-card);
+  line-height: 1;
+}
+
+.example-romaji {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-silver);
+  margin-top: 0.25rem;
+}
+
+.example-row {
+  font-size: 0.62rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+.example-plus {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.example-result {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-silver);
+}
+
 /* ===== Placeholder ("Kommer snart") ===== */
 #screen-placeholder {
   justify-content: center;
@@ -230,6 +449,16 @@ body {
   font-size: 6.5rem;
   line-height: 1;
   color: var(--color-ink);
+  margin-bottom: 1.25rem;
+}
+
+.row-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(20, 18, 16, 0.55);
   margin-bottom: 1.25rem;
 }
 
@@ -290,6 +519,12 @@ button:disabled {
   border-radius: 4px;
   font-size: 1.1rem;
   line-height: 1;
+  flex-shrink: 0;
+}
+
+.nav-btn-wide {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 #progress {
@@ -345,4 +580,152 @@ button:disabled {
   font-size: 0.72rem;
   color: var(--color-text-muted);
   line-height: 1.5;
+}
+
+/* ===== Quiz ===== */
+#screen-quiz {
+  justify-content: center;
+}
+
+.quiz-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.quiz-result-view {
+  display: none;
+}
+
+.quiz-progress {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.quiz-card {
+  padding: 2.25rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 40px -8px rgba(242, 102, 13, 0.55);
+}
+
+.quiz-card .character {
+  margin-bottom: 0;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.quiz-option {
+  width: 100%;
+  padding: 0.9rem 0.5rem;
+  font-size: 1.1rem;
+  text-transform: lowercase;
+}
+
+.quiz-option.correct {
+  background: #2FAE5C;
+  border-color: #2FAE5C;
+  color: white;
+}
+
+.quiz-option.incorrect {
+  background: #E24C42;
+  border-color: #E24C42;
+  color: white;
+}
+
+/* Buggfix: den generella disabled-dämpningen fick även rätt/fel-svaren att blekna. */
+.quiz-option.correct:disabled,
+.quiz-option.incorrect:disabled {
+  opacity: 1;
+}
+
+.result-card {
+  box-shadow: none;
+}
+
+.result-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 0.5rem;
+}
+
+.result-score {
+  font-size: 1rem;
+  color: rgba(20, 18, 16, 0.75);
+  margin-bottom: 1.75rem;
+}
+
+.result-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid rgba(20, 18, 16, 0.35);
+}
+
+.btn-outline:hover {
+  background: rgba(20, 18, 16, 0.08);
+  box-shadow: none;
+}
+
+/* ===== Fuskknapp under skrivguiden ===== */
+.cheat-btn {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 0.85rem;
+  background: transparent;
+  border: 1px dashed var(--color-surface-border);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.cheat-btn:hover {
+  border-color: var(--color-card);
+  color: var(--color-card);
+  box-shadow: none;
+  background: transparent;
+}
+
+.cheat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cheat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: var(--color-bg);
+  border-radius: 4px;
+}
+
+.cheat-char {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.6rem;
+  color: var(--color-card);
+}
+
+.cheat-romaji {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-silver);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }

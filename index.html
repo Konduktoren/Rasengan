@@ -49,17 +49,28 @@
       <button class="back-btn" data-target="screen-menu">← Tillbaka</button>
       <h2 class="screen-title">Välj alfabet</h2>
       <div class="menu-grid">
-        <button class="menu-tile" data-target="screen-lesson">
-          <span class="tile-label">Hiragana</span>
-        </button>
-        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Katakana">
-          <span class="tile-label">Katakana</span>
-          <span class="tile-badge">Kommer snart</span>
-        </button>
-        <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Kanji">
-          <span class="tile-label">Kanji</span>
-          <span class="tile-badge">Kommer snart</span>
-        </button>
+        <div class="menu-tile-row">
+          <button class="menu-tile" data-target="screen-lesson">
+            <span class="tile-label">Hiragana</span>
+          </button>
+          <button class="info-btn" data-info="hiragana" aria-label="Information om Hiragana">i</button>
+        </div>
+
+        <div class="menu-tile-row">
+          <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Katakana">
+            <span class="tile-label">Katakana</span>
+            <span class="tile-badge">Kommer snart</span>
+          </button>
+          <button class="info-btn" data-info="katakana" aria-label="Information om Katakana">i</button>
+        </div>
+
+        <div class="menu-tile-row">
+          <button class="menu-tile locked" data-target="screen-placeholder" data-placeholder-title="Kanji">
+            <span class="tile-label">Kanji</span>
+            <span class="tile-badge">Kommer snart</span>
+          </button>
+          <button class="info-btn" data-info="kanji" aria-label="Information om Kanji">i</button>
+        </div>
       </div>
     </section>
 
@@ -68,6 +79,7 @@
       <button class="back-btn" data-target="screen-tecken-menu">← Tillbaka</button>
 
       <div class="card">
+        <p class="row-label" id="row-label">Rad 1 / 10 · a</p>
         <p class="character" id="character">あ</p>
         <p class="romaji" id="romaji">?</p>
         <button id="reveal-btn">Visa uttal</button>
@@ -75,7 +87,7 @@
         <div class="nav-buttons">
           <button id="prev-btn" class="nav-btn" aria-label="Föregående tecken">←</button>
           <span id="progress">1 / 5</span>
-          <button id="next-btn" class="nav-btn" aria-label="Nästa tecken">→</button>
+          <button id="next-btn" class="nav-btn-wide">Nästa →</button>
         </div>
       </div>
 
@@ -96,6 +108,38 @@
           och pennan börjar där varje streck har sin siffra.
         </p>
       </div>
+
+      <button class="cheat-btn" id="cheat-btn">Fuska? Visa hela raden!</button>
+    </section>
+
+    <!-- ===== QUIZ (efter varje rad) ===== -->
+    <section id="screen-quiz" class="screen">
+      <button class="back-btn" data-target="screen-lesson">← Avbryt quiz</button>
+
+      <div id="quiz-question-view" class="quiz-view">
+        <p class="quiz-progress" id="quiz-progress">Fråga 1 / 5</p>
+
+        <div class="card quiz-card">
+          <p class="character" id="quiz-character">あ</p>
+        </div>
+
+        <div class="quiz-options" id="quiz-options">
+          <!-- Fyra svarsknappar skapas här av JavaScript -->
+        </div>
+      </div>
+
+      <div id="quiz-result-view" class="quiz-view quiz-result-view">
+        <div class="card result-card">
+          <p class="result-title">Bra jobbat!</p>
+          <p class="result-score" id="quiz-result-text">0 av 5 rätt</p>
+          <div class="result-actions">
+            <button id="quiz-retry-btn" class="btn-outline">Gör om quizet</button>
+            <button id="quiz-continue-btn">Fortsätt</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="cheat-btn" id="cheat-btn-quiz">Fuska? Visa hela raden!</button>
     </section>
 
     <!-- ===== PLACEHOLDER (återanvänds för Läsa / Prata / Katakana / Kanji) ===== -->
@@ -107,6 +151,15 @@
       </div>
     </section>
 
+  </div>
+
+  <!-- ===== INFO-RUTA (visas ovanpå allt när man klickar "i") ===== -->
+  <div id="info-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="modal-close" aria-label="Stäng">✕</button>
+      <h3 id="modal-title" class="modal-title">—</h3>
+      <p id="modal-body" class="modal-body">—</p>
+    </div>
   </div>
 
   <script src="data.js"></script>
