@@ -50,14 +50,56 @@ const SoundManager = (() => {
       tone(220, 0, 0.16, "sawtooth", 0.07);
       tone(160, 0.1, 0.22, "sawtooth", 0.07);
     },
+    gong() {
+      // Syntetisk gonggong: en låg grundton + flera "skeva" (icke-heltaliga)
+      // overtoner som klingar ut olika snabbt - det är den kombinationen som
+      // ger den där metalliska, resonanta gong-känslan. Plus ett kort brus
+      // i början som låter som själva slaget mot metallen.
+      const ctx = getContext();
+      const now = ctx.currentTime;
+      const fundamental = 90;
+      const partials = [1, 1.8, 2.4, 3.2, 4.1, 5.3];
+      const duration = 3.2;
+
+      partials.forEach((ratio, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(fundamental * ratio, now);
+        const partialVolume = 0.2 / (i + 1);
+        gain.gain.setValueAtTime(partialVolume, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration - i * 0.15);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      });
+
+      // Kort metalliskt "slag"-brus i attacken
+      const noiseLength = Math.floor(ctx.sampleRate * 0.05);
+      const noiseBuffer = ctx.createBuffer(1, noiseLength, ctx.sampleRate);
+      const noiseData = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < noiseLength; i++) {
+        noiseData[i] = Math.random() * 2 - 1;
+      }
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = noiseBuffer;
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = "bandpass";
+      noiseFilter.frequency.value = 2500;
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.14, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      noiseSource.connect(noiseFilter).connect(noiseGain).connect(ctx.destination);
+      noiseSource.start(now);
+    },
   };
 })();
 
-// Subtilt klickljud på i princip alla knappar i appen. Quiz-svarsknapparna
-// undantas här eftersom de istället får sitt eget rätt/fel-ljud (se längre ner).
+// Subtilt klickljud på i princip alla knappar i appen. Quiz-svarsknapparna och
+// Hai-knappen undantas här eftersom de istället har sina egna, tydligare ljud.
 document.addEventListener("click", (event) => {
   const button = event.target.closest("button");
-  if (button && !button.classList.contains("quiz-option")) {
+  if (button && !button.classList.contains("quiz-option") && !button.classList.contains("hai-btn")) {
     SoundManager.click();
   }
 });
@@ -79,9 +121,17 @@ function showScreen(id) {
   currentScreenId = id;
 }
 
+// Ljudklipp du själv laddat upp och äger rättigheterna att använda personligt
+const haiSound = new Audio("hai.mp3");
+
 document.querySelectorAll("[data-target]").forEach((button) => {
   button.addEventListener("click", () => {
     const targetId = button.dataset.target;
+
+    if (button.classList.contains("hai-btn")) {
+      haiSound.currentTime = 0;
+      haiSound.play();
+    }
 
     if (targetId === "screen-placeholder") {
       placeholderBackTarget = currentScreenId;
@@ -470,3 +520,121 @@ function showCheatSheet() {
 
 document.getElementById("cheat-btn").addEventListener("click", showCheatSheet);
 document.getElementById("cheat-btn-quiz").addEventListener("click", showCheatSheet);
+
+
+/* ================================
+   SKRIVLÄGE (rita tecknet med mus eller finger)
+   ================================ */
+
+const writeCanvas = document.getElementById("write-canvas");
+const writeCtx = writeCanvas.getContext("2d");
+const writeRomajiEl = document.getElementById("write-romaji");
+const writeGhostEl = document.getElementById("write-ghost");
+const writeProgressEl = document.getElementById("write-progress");
+const writeClearBtn = document.getElementById("write-clear-btn");
+const writeGhostToggleBtn = document.getElementById("write-ghost-toggle");
+const writePrevBtn = document.getElementById("write-prev-btn");
+const writeNextBtn = document.getElementById("write-next-btn");
+
+writeCtx.lineWidth = 8;
+writeCtx.lineCap = "round";
+writeCtx.lineJoin = "round";
+writeCtx.strokeStyle = "#141210";
+
+let isDrawing = false;
+
+// Räknar om ett mus-/pekskärmsklick till rätt koordinat på själva ritytan,
+// även om den visas i en annan storlek på skärmen än sin interna upplösning.
+function getCanvasPos(event) {
+  const rect = writeCanvas.getBoundingClientRect();
+  const scaleX = writeCanvas.width / rect.width;
+  const scaleY = writeCanvas.height / rect.height;
+  return {
+    x: (event.clientX - rect.left) * scaleX,
+    y: (event.clientY - rect.top) * scaleY,
+  };
+}
+
+function startDrawing(event) {
+  isDrawing = true;
+  writeCanvas.setPointerCapture(event.pointerId);
+  const pos = getCanvasPos(event);
+  writeCtx.beginPath();
+  writeCtx.moveTo(pos.x, pos.y);
+}
+
+function drawMove(event) {
+  if (!isDrawing) return;
+  const pos = getCanvasPos(event);
+  writeCtx.lineTo(pos.x, pos.y);
+  writeCtx.stroke();
+}
+
+function stopDrawing() {
+  isDrawing = false;
+}
+
+// "Pointer events" fungerar likadant för både mus och finger - vi behöver
+// inte skriva separat kod för touch och mus.
+writeCanvas.addEventListener("pointerdown", startDrawing);
+writeCanvas.addEventListener("pointermove", drawMove);
+writeCanvas.addEventListener("pointerup", stopDrawing);
+writeCanvas.addEventListener("pointerleave", stopDrawing);
+
+function clearCanvas() {
+  writeCtx.clearRect(0, 0, writeCanvas.width, writeCanvas.height);
+}
+
+writeClearBtn.addEventListener("click", clearCanvas);
+
+writeGhostToggleBtn.addEventListener("click", () => {
+  const isVisible = writeGhostEl.classList.toggle("visible");
+  writeGhostToggleBtn.textContent = isVisible ? "Dölj spökbild" : "Visa spökbild";
+});
+
+function renderWriteScreen() {
+  const group = HIRAGANA_GROUPS[groupIndex];
+  const item = group.chars[charIndexInGroup];
+
+  writeRomajiEl.textContent = item.romaji;
+  writeGhostEl.textContent = item.char;
+  writeProgressEl.textContent = `${charIndexInGroup + 1} / ${group.chars.length}`;
+
+  // Ny sida - rensa ritytan och göm spökbilden igen, så man tränar minnet varje gång
+  clearCanvas();
+  writeGhostEl.classList.remove("visible");
+  writeGhostToggleBtn.textContent = "Visa spökbild";
+
+  writePrevBtn.disabled = groupIndex === 0 && charIndexInGroup === 0;
+  writeNextBtn.disabled =
+    groupIndex === HIRAGANA_GROUPS.length - 1 &&
+    charIndexInGroup === group.chars.length - 1;
+}
+
+writePrevBtn.addEventListener("click", () => {
+  if (charIndexInGroup > 0) {
+    charIndexInGroup--;
+    renderWriteScreen();
+  } else if (groupIndex > 0) {
+    groupIndex--;
+    charIndexInGroup = HIRAGANA_GROUPS[groupIndex].chars.length - 1;
+    renderWriteScreen();
+  }
+});
+
+writeNextBtn.addEventListener("click", () => {
+  const group = HIRAGANA_GROUPS[groupIndex];
+  if (charIndexInGroup < group.chars.length - 1) {
+    charIndexInGroup++;
+    renderWriteScreen();
+  } else if (groupIndex < HIRAGANA_GROUPS.length - 1) {
+    groupIndex++;
+    charIndexInGroup = 0;
+    renderWriteScreen();
+  }
+});
+
+document.getElementById("write-mode-btn").addEventListener("click", () => {
+  renderWriteScreen();
+  showScreen("screen-write");
+});
