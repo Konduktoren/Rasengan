@@ -1,4 +1,69 @@
 /* ================================
+   LJUD (skapas direkt i webbläsaren, ingen ljudfil behövs)
+   ================================ */
+
+const SoundManager = (() => {
+  let audioCtx = null;
+
+  // AudioContext får bara skapas efter att användaren interagerat med sidan
+  // (webbläsarregel), så vi skapar den först när ett ljud faktiskt ska spelas.
+  function getContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  // Spelar en enkel ton: frekvens i Hz, när den ska starta (sekunder från nu),
+  // hur länge den varar, vågform, och volym (0-1).
+  function tone(freq, startDelay, duration, type, volume) {
+    const ctx = getContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + startDelay);
+
+    gain.gain.setValueAtTime(volume, ctx.currentTime + startDelay);
+    // Tonen tonas ut mjukt istället för att klippas av tvärt
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startDelay + duration);
+
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(ctx.currentTime + startDelay);
+    osc.stop(ctx.currentTime + startDelay + duration);
+  }
+
+  return {
+    click() {
+      tone(600, 0, 0.05, "sine", 0.05);
+    },
+    correct() {
+      // Två toner som stiger - låter glatt
+      tone(880, 0, 0.12, "sine", 0.12);
+      tone(1318.5, 0.09, 0.18, "sine", 0.12);
+    },
+    incorrect() {
+      // Två toner som sjunker och låter lite "buzzy" - tydligt men inte elakt
+      tone(220, 0, 0.16, "sawtooth", 0.07);
+      tone(160, 0.1, 0.22, "sawtooth", 0.07);
+    },
+  };
+})();
+
+// Subtilt klickljud på i princip alla knappar i appen. Quiz-svarsknapparna
+// undantas här eftersom de istället får sitt eget rätt/fel-ljud (se längre ner).
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (button && !button.classList.contains("quiz-option")) {
+    SoundManager.click();
+  }
+});
+
+
+/* ================================
    NAVIGERING MELLAN VYER (SKÄRMAR)
    ================================ */
 
@@ -190,8 +255,10 @@ function selectAnswer(clickedBtn, chosenRomaji, correctRomaji) {
   if (isCorrect) {
     quizScore++;
     clickedBtn.classList.add("correct");
+    SoundManager.correct();
   } else {
     clickedBtn.classList.add("incorrect");
+    SoundManager.incorrect();
     // Visa också vilket som var rätt svar
     allButtons.forEach((btn) => {
       if (btn.textContent === correctRomaji) {
