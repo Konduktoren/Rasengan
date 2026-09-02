@@ -50,6 +50,16 @@ const SoundManager = (() => {
       tone(220, 0, 0.16, "sawtooth", 0.07);
       tone(160, 0.1, 0.22, "sawtooth", 0.07);
     },
+    fanfare() {
+      // Fyra stigande toner (ett litet ackord som byggs upp) - spelas vid 5/5 rätt
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      notes.forEach((freq, i) => {
+        tone(freq, i * 0.09, 0.5, "triangle", 0.1);
+      });
+      // Ett avslutande ackord som klingar ut lite längre, för en "segerkänsla"
+      tone(1046.5, 0.36, 0.9, "triangle", 0.09);
+      tone(783.99, 0.36, 0.9, "triangle", 0.07);
+    },
     gong() {
       // Syntetisk gonggong: en låg grundton + flera "skeva" (icke-heltaliga)
       // overtoner som klingar ut olika snabbt - det är den kombinationen som
@@ -183,6 +193,13 @@ function renderCharacter() {
 
   rowLabelEl.textContent = `Rad ${groupIndex + 1} / ${HIRAGANA_GROUPS.length} · ${group.name}`;
   characterEl.textContent = item.char;
+
+  // Kör en liten "pop"-animation varje gång tecknet byts - vi tar bort och
+  // sätter tillbaka klassen så animationen triggas igen även om den redan kördes.
+  characterEl.classList.remove("char-pop");
+  void characterEl.offsetWidth;
+  characterEl.classList.add("char-pop");
+
   romajiEl.textContent = "?";
   romajiEl.classList.remove("visible");
   progressEl.textContent = `${charIndexInGroup + 1} / ${group.chars.length}`;
@@ -335,6 +352,12 @@ function showQuizResult() {
 
   const isLastGroup = groupIndex === HIRAGANA_GROUPS.length - 1;
   quizContinueBtn.textContent = isLastGroup ? "Klar! Tillbaka till menyn" : "Nästa rad →";
+
+  // Fira med konfetti och fanfar om man fick allt rätt!
+  if (quizScore === quizQuestions.length) {
+    launchConfetti();
+    SoundManager.fanfare();
+  }
 }
 
 quizContinueBtn.addEventListener("click", () => {
@@ -638,3 +661,83 @@ document.getElementById("write-mode-btn").addEventListener("click", () => {
   renderWriteScreen();
   showScreen("screen-write");
 });
+
+
+/* ================================
+   KONFETTI (firas när man får 5/5 rätt på ett quiz)
+   ================================ */
+
+const confettiCanvas = document.getElementById("confetti-canvas");
+const confettiCtx = confettiCanvas.getContext("2d");
+
+function resizeConfettiCanvas() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeConfettiCanvas);
+resizeConfettiCanvas();
+
+let confettiParticles = [];
+let confettiIsAnimating = false;
+
+// Skjuter ut ett gäng små rektanglar från mitten av skärmen, i olika
+// riktningar och hastigheter, som sen faller ner med gravitation.
+function launchConfetti() {
+  const colors = ["#F2660D", "#FF9142", "#FFD166", "#D6D9DC", "#FFFFFF"];
+  const originX = confettiCanvas.width / 2;
+  const originY = confettiCanvas.height / 2;
+  const particleCount = 120;
+
+  confettiParticles = [];
+  for (let i = 0; i < particleCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 4 + Math.random() * 8;
+    confettiParticles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      size: 4 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.3,
+      life: 1,
+    });
+  }
+
+  if (!confettiIsAnimating) {
+    confettiIsAnimating = true;
+    requestAnimationFrame(updateConfetti);
+  }
+}
+
+function updateConfetti() {
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  let anyAlive = false;
+
+  confettiParticles.forEach((p) => {
+    p.vy += 0.09; // gravitation drar partiklarna nedåt över tid (lägre värde = långsammare fall)
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rotation += p.rotationSpeed;
+    p.life -= 0.006; // lägre värde = konfettin klingar ut långsammare
+
+    if (p.life > 0) {
+      anyAlive = true;
+      confettiCtx.save();
+      confettiCtx.globalAlpha = Math.max(p.life, 0);
+      confettiCtx.translate(p.x, p.y);
+      confettiCtx.rotate(p.rotation);
+      confettiCtx.fillStyle = p.color;
+      confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      confettiCtx.restore();
+    }
+  });
+
+  if (anyAlive) {
+    requestAnimationFrame(updateConfetti);
+  } else {
+    confettiIsAnimating = false;
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  }
+}
