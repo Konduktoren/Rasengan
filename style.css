@@ -65,20 +65,27 @@ body {
 }
 
 .back-btn {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.25rem;
+  align-self: flex-start;
   background: transparent;
   border: none;
+  box-shadow: none;
   color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
+  padding: 0.3rem 0;
+  margin-bottom: 1.5rem;
 }
 
 .back-btn:hover {
   color: var(--color-silver);
+  background: transparent;
+  box-shadow: none;
+}
+
+.back-btn:active {
+  transform: none;
 }
 
 .screen-title {
@@ -87,7 +94,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--color-silver);
-  margin: 3.5rem 0 2rem;
+  margin: 0 0 2rem;
   text-align: center;
 }
 
@@ -756,6 +763,15 @@ button:disabled {
   inset: 0;
   pointer-events: none;
   z-index: 60;
+}
+
+/* ===== Hai-övergång (expanderar från knappen till hela skärmen) ===== */
+.hai-expand {
+  position: fixed;
+  background: radial-gradient(circle at 50% 35%, #FF9142, var(--color-card) 55%, var(--color-card-deep) 100%);
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0;
 }
 
 .result-actions {

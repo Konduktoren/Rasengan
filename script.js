@@ -133,14 +133,76 @@ function showScreen(id) {
 
 // Ljudklipp du själv laddat upp och äger rättigheterna att använda personligt
 const haiSound = new Audio("hai.mp3");
+haiSound.preload = "auto";
+
+const haiExpandEl = document.getElementById("hai-expand");
+
+// Låter en kopia av Hai-knappen expandera från sin exakta position och storlek
+// till att täcka hela skärmen, i ungefär samma takt som ljudklippet varar.
+// Skärmen byts först när ljudet är klart (eller efter en säkerhets-timeout
+// om ljudfilen av någon anledning inte kan spelas).
+function playHaiTransition(hiButton, targetScreenId) {
+  const rect = hiButton.getBoundingClientRect();
+  hiButton.style.opacity = "0";
+
+  haiExpandEl.style.transition = "none";
+  haiExpandEl.style.top = `${rect.top}px`;
+  haiExpandEl.style.left = `${rect.left}px`;
+  haiExpandEl.style.width = `${rect.width}px`;
+  haiExpandEl.style.height = `${rect.height}px`;
+  haiExpandEl.style.borderRadius = "50%";
+  haiExpandEl.style.opacity = "1";
+
+  // Tvingar webbläsaren att rita ut startläget innan vi ändrar till slutläget,
+  // annars hinner den aldrig visa startpositionen och hoppar direkt till slutet.
+  void haiExpandEl.offsetWidth;
+
+  const hasKnownDuration = haiSound.duration && isFinite(haiSound.duration) && haiSound.duration > 0;
+  const duration = hasKnownDuration
+    ? Math.min(Math.max(haiSound.duration, 0.6), 2.5)
+    : 1.1;
+
+  haiExpandEl.style.transition =
+    `top ${duration}s cubic-bezier(.65,0,.35,1), ` +
+    `left ${duration}s cubic-bezier(.65,0,.35,1), ` +
+    `width ${duration}s cubic-bezier(.65,0,.35,1), ` +
+    `height ${duration}s cubic-bezier(.65,0,.35,1), ` +
+    `border-radius ${duration}s ease`;
+
+  haiExpandEl.style.top = "0px";
+  haiExpandEl.style.left = "0px";
+  haiExpandEl.style.width = "100vw";
+  haiExpandEl.style.height = "100vh";
+  haiExpandEl.style.borderRadius = "0px";
+
+  haiSound.currentTime = 0;
+  haiSound.play();
+
+  let hasFinished = false;
+  function finishTransition() {
+    if (hasFinished) return;
+    hasFinished = true;
+
+    showScreen(targetScreenId);
+
+    // Tona bort expansionsytan igen, redo för nästa gång
+    haiExpandEl.style.transition = "opacity 0.3s ease";
+    haiExpandEl.style.opacity = "0";
+    hiButton.style.opacity = "";
+  }
+
+  haiSound.addEventListener("ended", finishTransition, { once: true });
+  // Säkerhetsnät ifall ljudet inte kan spelas (t.ex. saknad fil) - byt vy ändå
+  setTimeout(finishTransition, duration * 1000 + 300);
+}
 
 document.querySelectorAll("[data-target]").forEach((button) => {
   button.addEventListener("click", () => {
     const targetId = button.dataset.target;
 
     if (button.classList.contains("hai-btn")) {
-      haiSound.currentTime = 0;
-      haiSound.play();
+      playHaiTransition(button, targetId);
+      return;
     }
 
     if (targetId === "screen-placeholder") {
