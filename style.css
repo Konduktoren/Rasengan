@@ -961,14 +961,23 @@ body {
   margin-top: 1rem;
 }
 
+#spell-hiragana-grid,
+#spell-katakana-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .spell-grid-btn {
   cursor: pointer;
   clip-path: none;
-  padding: 0.6rem 0.4rem;
+  padding: 0.5rem 0.2rem;
   text-transform: none;
   letter-spacing: normal;
   font-weight: normal;
   box-shadow: none;
+}
+
+.spell-grid-btn .gojuon-char {
+  font-size: 1.1rem;
 }
 
 .spell-grid-btn::before {
