@@ -77,6 +77,38 @@ body {
   clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
 }
 
+/* Kompakt pil-variant i hörnet av det stora glödande kortet (lektionsvyn) */
+.card-back-btn {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  width: auto;
+  max-width: none;
+  margin-top: 0;
+  padding: 0.2rem 0.3rem;
+  font-size: 1.15rem;
+  background: transparent;
+  color: var(--color-card);
+  text-shadow: 0 0 8px rgba(242, 102, 13, 0.6);
+  clip-path: none;
+  box-shadow: none;
+  z-index: 2;
+}
+
+.card-back-btn::before {
+  content: none;
+}
+
+.card-back-btn:hover:not(:disabled) {
+  background: transparent;
+  box-shadow: none;
+  transform: scale(1.15);
+}
+
+.card-back-btn:active {
+  transform: scale(0.9);
+}
+
 .back-btn:active {
   transform: scale(0.96);
 }
