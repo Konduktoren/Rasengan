@@ -351,7 +351,7 @@ function renderCharacter() {
   document.getElementById("cheat-btn").style.display = isSpellMode ? "none" : "";
 
   if (isSpellMode) {
-    spellMeaningEl.textContent = item.meaning;
+    spellMeaningEl.textContent = `${item.meaning} - ${item.romaji}`;
     spellAnswer = [];
     renderSpellAnswer();
   } else {
